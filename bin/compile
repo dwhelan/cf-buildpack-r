@@ -85,11 +85,13 @@ then
   cp -r $CACHE_DIR/vendor $BUILD_DIR
 
 else
+  mkdir -p /app/.apt/usr/lib/gcc/x86_64-linux-gnu/$GCC_VERSION
 
   # download and unpack binaries
   echo "Downloading and unpacking R binaries ($R_BINARIES)" | indent
   curl $R_BINARIES -s -o - | tar xzf - -C $BUILD_DIR
-
+  echo "Completed downloading and unpacking R binaries ($R_BINARIES)" | indent
+  
 fi
 
 #
@@ -124,8 +126,8 @@ else
 
   # move the binary dependances to /app/.apt
   # so that R can find them when compiling packages
-  mv $VENDOR_DIR/.apt /app
-
+  cp -r $VENDOR_DIR/.apt/ /app
+  rm -rf $VENDOR_DIR/.apt
 fi
 
 # move the R binaries to /app/vendor/R
